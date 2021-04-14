@@ -1,0 +1,134 @@
+playerX = 0
+playerO = 0         ###keeping track of scores
+drawgame = 0
+
+#Creates an empty board
+def makenewboard():
+    for i in range(3):
+        row = ["EMPTY" for i in range(3)]
+        board.append(row)
+
+#Prints the current state of the board
+def printboard():
+    for n in range(3):
+        for j in range(3):
+            print("X:", n + 1, "Y:", j + 1, board[n][j], end='--')
+        print(" ")
+
+#Requests and processes player turns. P = X or O depending on who's turn it is.
+def playerturn(P):
+    global nextturn
+    global ticker
+    x = int(input("please enter number #1")) - 1
+    y = int(input("please enter number #2")) - 1
+    print("X =", (x + 1), "Y =", (y + 1))
+    if board[x][y] != "EMPTY":
+        print("Somebody has already taken this spot")
+        playerturn(P)
+    if P == "O":
+        board[x][y] = "O0000"
+        nextturn = "X"
+        ticker += 1
+        winnercheck(P)
+    if P == "X":
+        board[x][y] = "XXXXX"
+        nextturn = "O"
+        ticker += 1
+        winnercheck(P)
+
+#Keeps track of score totals
+def scoreadder(P):
+    global playerX
+    global playerO
+    if P == "X":
+        playerX += 1
+        print("Player X wins:", playerX)
+        printboard()
+        game()
+    if P == "O":
+        playerO += 1
+        print("player O wins", playerO)
+        printboard()
+        game()
+
+#8 the winning conditions. (Currently bugged since it counts 3 empty segments as a win)
+def winnercheck(P): 
+    global playerX
+    global playerO
+    global ticker
+    ##across
+    if ticker >= 5:
+        if board[0][0] == board[0][1] == board[0][2]:
+            print("Player", P, "wins")
+            scoreadder(P)
+        if board[1][0] == board[1][1] == board[1][2]:
+            print("Player", P, "wins")
+            scoreadder(P)
+        if board[2][0] == board[2][1] == board[2][2]:
+            print("Player", P, "wins")
+            scoreadder(P)
+    ##Upwards
+        if board[0][0] == board[1][0] == board[2][0]:
+            print("Player", P, "wins")
+            scoreadder(P)
+        if board[0][1] == board[1][1] == board[2][1]:
+            print("Player", P, "wins")
+            scoreadder(P)
+        if board[0][2] == board[1][2] == board[2][2]:
+            print("Player", P, "wins")
+            scoreadder(P)
+    ##Diagonal
+        if board[2][2] == board[1][1] == board[0][0]:
+            print("Player", P, "wins")
+            scoreadder(P)
+        if board[2][0] == board[1][1] == board[0][2]:
+            print("Player", P, "wins")
+            scoreadder(P)
+
+        else:
+            print("no winner yet")
+
+#def resetscore():
+#    playerX = 0
+#    playerO = 0
+#    draw = 0
+#    game()
+
+
+#The main loop
+def game():
+    global playerO      # Player "O"
+    global playerX      # Player "X"
+    global drawgame     # Score counter for games with on winner
+    global board        # The array used for the board
+    global boardfull    # True or False statement idicating if the board is full
+    global nextturn     # The current player's symbol (X or O)
+    global reset        # Not yet used (will be to reset the score board)
+    global ticker       # Counts turns made.
+    ticker = 0
+    reset = 0
+    nextturn = "X"
+    board = []
+    boardfull = False
+    #reset = input("Do you wish to reset the scores 1 for yes 0 for no")
+    #if int(reset) == 1:
+    #    resetscore()
+    print("lets play O's and X's")
+    makenewboard()
+    printboard()
+    while boardfull == False:
+        print("player turn =", nextturn, "Round number =", ticker)
+        playerturn(nextturn)
+        printboard()
+        if any("EMPTY" in s for s in board): ###Feedback, is board full.
+            print("EMPTY" in board)
+            print("The board is not full")
+        else:
+            print("The board is full game over, it is a draw")
+            winnercheck(nextturn)
+            drawgame += 1
+            game()
+
+
+game()
+
