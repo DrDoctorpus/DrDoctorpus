@@ -1,3 +1,6 @@
+###This is the class game of ticTacToe or Noughts + Crosses it depends where you are from.
+###Still unfinished.
+
 playerX = 0
 playerO = 0         ###keeping track of scores
 drawgame = 0
